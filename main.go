@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 
-//go:generate git switch -c "release_v0.0.2+$((RANDOM % 1000))"
+//go:generate git switch -c "release-v0.0.2"
 //go:generate git commit --allow-empty -m 'Release'
 //go:generate git tag -f v0.0.2
 //go:generate git push -f origin
