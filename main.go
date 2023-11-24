@@ -14,11 +14,11 @@ import (
 
 //go:generate git config --global user.email "you@example.com"
 //go:generate git config --global user.name "Your Name"
-//go:generate git switch -c "release-v0.0.3"
+//go:generate git switch -c "release-v0.0.2"
 //go:generate git commit --allow-empty -m 'Release'
+//go:generate git push --set-upstream origin release-v0.0.2
 //go:generate git tag -f v0.0.2
 //go:generate git push -f origin
-//go:generate exit 0
 
 //go:generate terraform fmt -recursive ./examples/
 //go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
