@@ -69,12 +69,12 @@ func TestAccResourceCosignSign(t *testing.T) {
 			// Sign and verify the first image.
 			{
 				Config: fmt.Sprintf(`
-resource "cosign_sign" "foo" {
+resource "scribble_sign" "foo" {
   image = %q
 }
 
-data "cosign_verify" "bar" {
-  image  = cosign_sign.foo.signed_ref
+data "scribble_verify" "bar" {
+  image  = scribble_sign.foo.signed_ref
   policy = jsonencode({
     apiVersion = "policy.sigstore.dev/v1beta1"
     kind       = "ClusterImagePolicy"
@@ -90,7 +90,7 @@ data "cosign_verify" "bar" {
           url = "https://fulcio.sigstore.dev"
           identities = [{
             issuer  = "https://token.actions.githubusercontent.com"
-            subject = "https://github.com/chainguard-dev/terraform-provider-cosign/.github/workflows/test.yml@refs/heads/main"
+            subject = "https://github.com/ArmmanMechanics/terraform-provider-scribble/.github/workflows/test.yml@refs/heads/main"
           }]
         }
         ctlog = {
@@ -103,24 +103,24 @@ data "cosign_verify" "bar" {
 `, ref1, ref1),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestMatchResourceAttr(
-						"cosign_sign.foo", "image", regexp.MustCompile("^"+ref1.String())),
+						"scribble_sign.foo", "image", regexp.MustCompile("^"+ref1.String())),
 					resource.TestMatchResourceAttr(
-						"cosign_sign.foo", "signed_ref", regexp.MustCompile("^"+ref1.String())),
+						"scribble_sign.foo", "signed_ref", regexp.MustCompile("^"+ref1.String())),
 					// Check that it got signed!
 					resource.TestMatchResourceAttr(
-						"data.cosign_verify.bar", "verified_ref", regexp.MustCompile("^"+ref1.String())),
+						"data.scribble_verify.bar", "verified_ref", regexp.MustCompile("^"+ref1.String())),
 				),
 			},
 
 			// Update the sign resource to sign the second image, and verify that.
 			{
 				Config: fmt.Sprintf(`
-resource "cosign_sign" "foo" {
+resource "scribble_sign" "foo" {
   image = %q
 }
 
-data "cosign_verify" "bar" {
-  image  = cosign_sign.foo.signed_ref
+data "scribble_verify" "bar" {
+  image  = scribble_sign.foo.signed_ref
   policy = jsonencode({
     apiVersion = "policy.sigstore.dev/v1beta1"
     kind       = "ClusterImagePolicy"
@@ -136,7 +136,7 @@ data "cosign_verify" "bar" {
           url = "https://fulcio.sigstore.dev"
           identities = [{
             issuer  = "https://token.actions.githubusercontent.com"
-            subject = "https://github.com/chainguard-dev/terraform-provider-cosign/.github/workflows/test.yml@refs/heads/main"
+            subject = "https://github.com/ArmmanMechanics/terraform-provider-scribble/.github/workflows/test.yml@refs/heads/main"
           }]
         }
         ctlog = {
@@ -149,12 +149,12 @@ data "cosign_verify" "bar" {
 `, ref2, ref2),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestMatchResourceAttr(
-						"cosign_sign.foo", "image", regexp.MustCompile("^"+ref2.String())),
+						"scribble_sign.foo", "image", regexp.MustCompile("^"+ref2.String())),
 					resource.TestMatchResourceAttr(
-						"cosign_sign.foo", "signed_ref", regexp.MustCompile("^"+ref2.String())),
+						"scribble_sign.foo", "signed_ref", regexp.MustCompile("^"+ref2.String())),
 					// Check that it got signed!
 					resource.TestMatchResourceAttr(
-						"data.cosign_verify.bar", "verified_ref", regexp.MustCompile("^"+ref2.String())),
+						"data.scribble_verify.bar", "verified_ref", regexp.MustCompile("^"+ref2.String())),
 				),
 			},
 		},
@@ -214,14 +214,14 @@ func TestAccResourceCosignSignConflict(t *testing.T) {
 				Steps: []resource.TestStep{
 					{
 						Config: fmt.Sprintf(`
-		resource "cosign_sign" "foo" {
+		resource "scribble_sign" "foo" {
   		image = %q
 
   		conflict = %q
 		}
 
-		data "cosign_verify" "bar" {
-  		image  = cosign_sign.foo.signed_ref
+		data "scribble_verify" "bar" {
+  		image  = scribble_sign.foo.signed_ref
   		policy = jsonencode({
     		apiVersion = "policy.sigstore.dev/v1beta1"
     		kind       = "ClusterImagePolicy"
@@ -237,7 +237,7 @@ func TestAccResourceCosignSignConflict(t *testing.T) {
           		url = "https://fulcio.sigstore.dev"
           		identities = [{
             		issuer  = "https://token.actions.githubusercontent.com"
-            		subject = "https://github.com/chainguard-dev/terraform-provider-cosign/.github/workflows/test.yml@refs/heads/main"
+            		subject = "https://github.com/ArmmanMechanics/terraform-provider-scribble/.github/workflows/test.yml@refs/heads/main"
           		}]
         		}
         		ctlog = {
@@ -250,12 +250,12 @@ func TestAccResourceCosignSignConflict(t *testing.T) {
 		`, ref1, tc.conflict, ref1),
 						Check: resource.ComposeTestCheckFunc(
 							resource.TestMatchResourceAttr(
-								"cosign_sign.foo", "image", regexp.MustCompile("^"+ref1.String())),
+								"scribble_sign.foo", "image", regexp.MustCompile("^"+ref1.String())),
 							resource.TestMatchResourceAttr(
-								"cosign_sign.foo", "signed_ref", regexp.MustCompile("^"+ref1.String())),
+								"scribble_sign.foo", "signed_ref", regexp.MustCompile("^"+ref1.String())),
 							// Check that it got signed!
 							resource.TestMatchResourceAttr(
-								"data.cosign_verify.bar", "verified_ref", regexp.MustCompile("^"+ref1.String())),
+								"data.scribble_verify.bar", "verified_ref", regexp.MustCompile("^"+ref1.String())),
 						),
 					},
 				},

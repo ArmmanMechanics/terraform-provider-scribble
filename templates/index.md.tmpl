@@ -1,7 +1,7 @@
 ---
-page_title: "Provider: Cosign"
+page_title: "Provider: Scribble"
 description: |-
-  Terraform Provider for cosign
+  Terraform Provider for scribble
 ---
 
 # {{ .ProviderShortName | upper }} Provider
@@ -10,28 +10,28 @@ description: |-
 
 ### Verify
 
-This provides a `cosign_verify` data source, which can be used with any
+This provides a `scribble_verify` data source, which can be used with any
 containerized infrastructure rules to enforce deploy-time policy checking:
 
 {{ tffile "examples/provider/provider.tf" }}
 
-{{ tffile "examples/data-sources/cosign-verify.tf" }}
+{{ tffile "examples/data-sources/scribble-verify.tf" }}
 
 {{ .SchemaMarkdown | trimspace }}
 
 ## Sign
 
-This provider also exposes `cosign_sign` and `cosign_attest` resources that will
+This provider also exposes `scribble_sign` and `scribble_attest` resources that will
 sign and attest a provided OCI digest, which is intended to compose with
 OCI providers such as [`ko`](https://github.com/ko-build/terraform-provider-ko),
 [`apko`](https://github.com/chainguard-dev/terraform-provider-apko), and
 [`oci`](https://github.com/chainguard-dev/terraform-provider-oci).
 
-{{ tffile "examples/resource/cosign_sign.tf" }}
+{{ tffile "examples/resource/scribble_sign.tf" }}
 
 ## Attest
 
-{{ tffile "examples/resource/cosign_attest.tf" }}
+{{ tffile "examples/resource/scribble_attest.tf" }}
 
 ## Environment Variables
 
@@ -42,4 +42,4 @@ OCI providers such as [`ko`](https://github.com/ko-build/terraform-provider-ko),
 | TF_COSIGN_ISSUER        | https://oauth2.sigstore.dev/auth | Configures Sigstore token issuer.                                                              |
 | TF_COSIGN_CLIENT_SECRET |                                  | Configures Sigstore OAuth Client Secret.                                                       |
 | TF_COSIGN_REDIRECT_URL  |                                  | Configures Sigstore interactive OAuth redirect URL. If empty, a random localhost port is used. |
-| TF_COSIGN_DISABLE       |                                  | Disables all cosign operations.                                                                |
+| TF_COSIGN_DISABLE       |                                  | Disables all scribble operations.                                                                |

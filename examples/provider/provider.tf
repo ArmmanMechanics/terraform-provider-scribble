@@ -1,2 +1,2 @@
-provider "cosign" {
+provider "scribble" {
 }

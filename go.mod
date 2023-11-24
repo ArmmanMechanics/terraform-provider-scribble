@@ -1,4 +1,4 @@
-module github.com/chainguard-dev/terraform-provider-cosign
+module github.com/ArmmanMechanics/terraform-provider-scribble
 
 go 1.19
 

@@ -1,5 +1,5 @@
-resource "cosign_attest" "example" {
-  image = cosign_sign.example.signed_ref
+resource "scribble_attest" "example" {
+  image = scribble_sign.example.signed_ref
 
   predicates {
     type = "https://example.com/my/predicate/type"

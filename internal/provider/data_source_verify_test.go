@@ -16,7 +16,7 @@ func TestAccResourceCosignVerify(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{{
 			Config: fmt.Sprintf(`
-data "cosign_verify" "foo" {
+data "scribble_verify" "foo" {
   image  = %q
   policy = jsonencode({
     apiVersion = "policy.sigstore.dev/v1beta1"
@@ -45,9 +45,9 @@ data "cosign_verify" "foo" {
 }`, repo),
 			Check: resource.ComposeTestCheckFunc(
 				resource.TestMatchResourceAttr(
-					"data.cosign_verify.foo", "image", regexp.MustCompile("^"+repo)),
+					"data.scribble_verify.foo", "image", regexp.MustCompile("^"+repo)),
 				resource.TestMatchResourceAttr(
-					"data.cosign_verify.foo", "verified_ref", regexp.MustCompile("^"+repo+"@sha256:")),
+					"data.scribble_verify.foo", "verified_ref", regexp.MustCompile("^"+repo+"@sha256:")),
 			),
 		}},
 	})
@@ -57,7 +57,7 @@ data "cosign_verify" "foo" {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{{
 			Config: fmt.Sprintf(`
-data "cosign_verify" "foo" {
+data "scribble_verify" "foo" {
   image  = %q
   policy = jsonencode({
     apiVersion = "policy.sigstore.dev/v1beta1"
