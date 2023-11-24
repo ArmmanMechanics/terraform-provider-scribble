@@ -5,8 +5,8 @@ import (
 	"net/url"
 	"sync"
 
-	"github.com/chainguard-dev/terraform-provider-cosign/internal/secant/fulcio"
-	rclient "github.com/chainguard-dev/terraform-provider-cosign/internal/secant/rekor/client"
+	"github.com/ArmmanMechanics/terraform-provider-scribble/internal/secant/fulcio"
+	rclient "github.com/ArmmanMechanics/terraform-provider-scribble/internal/secant/rekor/client"
 	"github.com/google/go-containerregistry/pkg/authn"
 	"github.com/google/go-containerregistry/pkg/v1/google"
 	"github.com/google/go-containerregistry/pkg/v1/remote"
@@ -52,7 +52,7 @@ func (p *ProviderOpts) rekorClient(rekorUrl string) (*client.Rekor, error) {
 		return rekorClient, nil
 	}
 
-	rekorClient, err := rclient.GetRekorClient(rekorUrl, rclient.WithUserAgent("terraform-provider-cosign"))
+	rekorClient, err := rclient.GetRekorClient(rekorUrl, rclient.WithUserAgent("terraform-provider-scribble"))
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +73,7 @@ func (p *ProviderOpts) signerVerifier(fulcioUrl string) (*fulcio.SignerVerifier,
 	if err != nil {
 		return nil, err
 	}
-	fulcioClient := api.NewClient(furl, api.WithUserAgent("terraform-provider-cosign"))
+	fulcioClient := api.NewClient(furl, api.WithUserAgent("terraform-provider-scribble"))
 	sv, err := fulcio.NewSigner(p.oidc, fulcioClient)
 	if err != nil {
 		return nil, err
@@ -88,7 +88,7 @@ func (p *ProviderOpts) withContext(ctx context.Context) []remote.Option {
 }
 
 func (p *Provider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "cosign"
+	resp.TypeName = "scribble"
 	resp.Version = p.version
 }
 
@@ -113,12 +113,12 @@ func (p *Provider) Configure(ctx context.Context, req provider.ConfigureRequest,
 
 	puller, err := remote.NewPuller(ropts...)
 	if err != nil {
-		resp.Diagnostics.AddError("Configuring cosign provider options", err.Error())
+		resp.Diagnostics.AddError("Configuring scribble provider options", err.Error())
 		return
 	}
 	pusher, err := remote.NewPusher(ropts...)
 	if err != nil {
-		resp.Diagnostics.AddError("Configuring cosign provider options", err.Error())
+		resp.Diagnostics.AddError("Configuring scribble provider options", err.Error())
 		return
 	}
 	ropts = append(ropts, remote.Reuse(puller), remote.Reuse(pusher))

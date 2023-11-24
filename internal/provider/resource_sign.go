@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/chainguard-dev/terraform-provider-cosign/internal/secant"
+	"github.com/ArmmanMechanics/terraform-provider-scribble/internal/secant"
 	"github.com/chainguard-dev/terraform-provider-oci/pkg/validators"
 	"github.com/google/go-containerregistry/pkg/name"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -49,7 +49,7 @@ func (r *SignResource) Metadata(ctx context.Context, req resource.MetadataReques
 
 func (r *SignResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "This signs the provided image digest with cosign.",
+		MarkdownDescription: "This signs the provided image digest with scribble.",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Computed:            true,
@@ -120,8 +120,8 @@ func (r *SignResource) doSign(ctx context.Context, data *SignResourceModel) (str
 		return "", nil, errors.New("Unable to parse image digest")
 	}
 
-	if os.Getenv("TF_COSIGN_DISABLE") != "" {
-		return digest.String(), errors.New("TF_COSIGN_DISABLE is set, skipping signing"), nil
+	if os.Getenv("TF_SCRIBBLE_DISABLE") != "" {
+		return digest.String(), errors.New("TF_SCRIBBLE_DISABLE is set, skipping signing"), nil
 	}
 	if !r.popts.oidc.Enabled(ctx) {
 		return digest.String(), errors.New("no ambient credentials are available to sign with, skipping signing"), nil

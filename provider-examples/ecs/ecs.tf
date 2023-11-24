@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    cosign = {
-      source = "chainguard-dev/cosign"
+    scribble = {
+      source = "ArmmanMechanics/scribble"
     }
   }
 }
@@ -18,13 +18,13 @@ provider "aws" {
   region = var.region
 }
 
-data "cosign_verify" "example" {
+data "scribble_verify" "example" {
   image  = "cgr.dev/chainguard/nginx"
   policy = file("${path.module}/nginx.policy.yaml")
 }
 
 resource "aws_iam_role" "example" {
-  name = "terraform-ecs-cosign"
+  name = "terraform-ecs-scribble"
 
   assume_role_policy = jsonencode({
     "Version": "2012-10-17",
@@ -53,7 +53,7 @@ resource "aws_iam_role_policy_attachment" "allow_ecs" {
 }
 
 resource "aws_ecs_cluster" "cluster" {
-  name = "tf-cosign-cluster"
+  name = "tf-scribble-cluster"
 }
 
 resource "aws_ecs_service" "bar" {
@@ -82,7 +82,7 @@ resource "aws_ecs_task_definition" "bar" {
   container_definitions    = jsonencode([
     {
       "name": "bar",
-      "image": data.cosign_verify.example.verified_ref,
+      "image": data.scribble_verify.example.verified_ref,
       "cpu": 1024,
       "memory": 2048,
       "essential": true

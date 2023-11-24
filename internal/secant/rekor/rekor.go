@@ -19,9 +19,9 @@ import (
 	"crypto/sha256"
 	"io"
 
-	"github.com/chainguard-dev/terraform-provider-cosign/internal/secant/models/rekord"
-	"github.com/chainguard-dev/terraform-provider-cosign/internal/secant/tlog"
-	"github.com/chainguard-dev/terraform-provider-cosign/internal/secant/types"
+	"github.com/ArmmanMechanics/terraform-provider-scribble/internal/secant/models/rekord"
+	"github.com/ArmmanMechanics/terraform-provider-scribble/internal/secant/tlog"
+	"github.com/ArmmanMechanics/terraform-provider-scribble/internal/secant/types"
 	cbundle "github.com/sigstore/cosign/v2/pkg/cosign/bundle"
 	"github.com/sigstore/cosign/v2/pkg/oci"
 	"github.com/sigstore/cosign/v2/pkg/oci/mutate"

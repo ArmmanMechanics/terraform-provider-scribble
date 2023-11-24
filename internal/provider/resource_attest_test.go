@@ -57,7 +57,7 @@ func TestAccResourceCosignAttest(t *testing.T) {
 
 	value := uuid.New().String()
 
-	tmp, err := os.CreateTemp("", "cosign-attest-*.json")
+	tmp, err := os.CreateTemp("", "scribble-attest-*.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -76,7 +76,7 @@ func TestAccResourceCosignAttest(t *testing.T) {
 			// Attest and verify the first image.
 			{
 				Config: fmt.Sprintf(`
-resource "cosign_attest" "foo" {
+resource "scribble_attest" "foo" {
   image          = %q
   predicate_type = %q
   predicate      = jsonencode({
@@ -84,8 +84,8 @@ resource "cosign_attest" "foo" {
   })
 }
 
-data "cosign_verify" "bar" {
-  image  = cosign_attest.foo.attested_ref
+data "scribble_verify" "bar" {
+  image  = scribble_attest.foo.attested_ref
   policy = jsonencode({
     apiVersion = "policy.sigstore.dev/v1beta1"
     kind       = "ClusterImagePolicy"
@@ -101,7 +101,7 @@ data "cosign_verify" "bar" {
           url = "https://fulcio.sigstore.dev"
           identities = [{
             issuer  = "https://token.actions.githubusercontent.com"
-            subject = "https://github.com/chainguard-dev/terraform-provider-cosign/.github/workflows/test.yml@refs/heads/main"
+            subject = "https://github.com/ArmmanMechanics/terraform-provider-scribble/.github/workflows/test.yml@refs/heads/main"
           }]
         }
         attestations = [{
@@ -131,19 +131,19 @@ data "cosign_verify" "bar" {
 `, ref1, url, value, ref1, url, url, value),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestMatchResourceAttr(
-						"cosign_attest.foo", "image", regexp.MustCompile("^"+ref1.String())),
+						"scribble_attest.foo", "image", regexp.MustCompile("^"+ref1.String())),
 					resource.TestMatchResourceAttr(
-						"cosign_attest.foo", "attested_ref", regexp.MustCompile("^"+ref1.String())),
+						"scribble_attest.foo", "attested_ref", regexp.MustCompile("^"+ref1.String())),
 					// Check that it got attested!
 					resource.TestMatchResourceAttr(
-						"data.cosign_verify.bar", "verified_ref", regexp.MustCompile("^"+ref1.String())),
+						"data.scribble_verify.bar", "verified_ref", regexp.MustCompile("^"+ref1.String())),
 				),
 			},
 
 			// Update the resource to attest the second image (this time via a file!), and verify it.
 			{
 				Config: fmt.Sprintf(`
-resource "cosign_attest" "foo" {
+resource "scribble_attest" "foo" {
   image          = %q
   predicate_type = %q
   predicate_file {
@@ -152,8 +152,8 @@ resource "cosign_attest" "foo" {
   }
 }
 
-data "cosign_verify" "bar" {
-  image  = cosign_attest.foo.attested_ref
+data "scribble_verify" "bar" {
+  image  = scribble_attest.foo.attested_ref
   policy = jsonencode({
     apiVersion = "policy.sigstore.dev/v1beta1"
     kind       = "ClusterImagePolicy"
@@ -169,7 +169,7 @@ data "cosign_verify" "bar" {
           url = "https://fulcio.sigstore.dev"
           identities = [{
             issuer  = "https://token.actions.githubusercontent.com"
-            subject = "https://github.com/chainguard-dev/terraform-provider-cosign/.github/workflows/test.yml@refs/heads/main"
+            subject = "https://github.com/ArmmanMechanics/terraform-provider-scribble/.github/workflows/test.yml@refs/heads/main"
           }]
         }
         attestations = [{
@@ -199,12 +199,12 @@ data "cosign_verify" "bar" {
 `, ref2, url, tmp.Name(), hash, ref2, url, url, value),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestMatchResourceAttr(
-						"cosign_attest.foo", "image", regexp.MustCompile("^"+ref2.String())),
+						"scribble_attest.foo", "image", regexp.MustCompile("^"+ref2.String())),
 					resource.TestMatchResourceAttr(
-						"cosign_attest.foo", "attested_ref", regexp.MustCompile("^"+ref2.String())),
+						"scribble_attest.foo", "attested_ref", regexp.MustCompile("^"+ref2.String())),
 					// Check that it got attested!
 					resource.TestMatchResourceAttr(
-						"data.cosign_verify.bar", "verified_ref", regexp.MustCompile("^"+ref2.String())),
+						"data.scribble_verify.bar", "verified_ref", regexp.MustCompile("^"+ref2.String())),
 				),
 			},
 		},
@@ -259,7 +259,7 @@ data "cosign_verify" "bar" {
 					// Attest and verify the first image.
 					{
 						Config: fmt.Sprintf(`
-resource "cosign_attest" "foo" {
+resource "scribble_attest" "foo" {
   image          = %q
   conflict       = %q
   predicates {
@@ -278,8 +278,8 @@ resource "cosign_attest" "foo" {
   }
 }
 
-data "cosign_verify" "bar" {
-  image  = cosign_attest.foo.attested_ref
+data "scribble_verify" "bar" {
+  image  = scribble_attest.foo.attested_ref
   policy = jsonencode({
     apiVersion = "policy.sigstore.dev/v1beta1"
     kind       = "ClusterImagePolicy"
@@ -295,7 +295,7 @@ data "cosign_verify" "bar" {
           url = "https://fulcio.sigstore.dev"
           identities = [{
             issuer  = "https://token.actions.githubusercontent.com"
-            subject = "https://github.com/chainguard-dev/terraform-provider-cosign/.github/workflows/test.yml@refs/heads/main"
+            subject = "https://github.com/ArmmanMechanics/terraform-provider-scribble/.github/workflows/test.yml@refs/heads/main"
           }]
         }
         attestations = [{
@@ -341,12 +341,12 @@ data "cosign_verify" "bar" {
 `, ref1, tc.conflict, url, value, url2, tmp.Name(), hash, ref1, url, url, value, url2, url2, value),
 						Check: resource.ComposeTestCheckFunc(
 							resource.TestMatchResourceAttr(
-								"cosign_attest.foo", "image", regexp.MustCompile("^"+ref1.String())),
+								"scribble_attest.foo", "image", regexp.MustCompile("^"+ref1.String())),
 							resource.TestMatchResourceAttr(
-								"cosign_attest.foo", "attested_ref", regexp.MustCompile("^"+ref1.String())),
+								"scribble_attest.foo", "attested_ref", regexp.MustCompile("^"+ref1.String())),
 							// Check that it got attested!
 							resource.TestMatchResourceAttr(
-								"data.cosign_verify.bar", "verified_ref", regexp.MustCompile("^"+ref1.String())),
+								"data.scribble_verify.bar", "verified_ref", regexp.MustCompile("^"+ref1.String())),
 						),
 					},
 				},

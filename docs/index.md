@@ -1,25 +1,25 @@
 ---
-page_title: "Provider: Cosign"
+page_title: "Provider: Scribble"
 description: |-
-  Terraform Provider for cosign
+  Terraform Provider for scribble
 ---
 
-# COSIGN Provider
+# SCRIBBLE Provider
 
 ## Usage
 
 ### Verify
 
-This provides a `cosign_verify` data source, which can be used with any
+This provides a `scribble_verify` data source, which can be used with any
 containerized infrastructure rules to enforce deploy-time policy checking:
 
 ```terraform
-provider "cosign" {
+provider "scribble" {
 }
 ```
 
 ```terraform
-data "cosign_verify" "example" {
+data "scribble_verify" "example" {
   image  = "cgr.dev/chainguard/static:latest-glibc"
   policy = file("my-policy.yaml")
 }
@@ -30,14 +30,14 @@ data "cosign_verify" "example" {
 
 ## Sign
 
-This provider also exposes `cosign_sign` and `cosign_attest` resources that will
+This provider also exposes `scribble_sign` and `scribble_attest` resources that will
 sign and attest a provided OCI digest, which is intended to compose with
 OCI providers such as [`ko`](https://github.com/ko-build/terraform-provider-ko),
 [`apko`](https://github.com/chainguard-dev/terraform-provider-apko), and
 [`oci`](https://github.com/chainguard-dev/terraform-provider-oci).
 
 ```terraform
-resource "cosign_sign" "example" {
+resource "scribble_sign" "example" {
   image = ko_build.image-build.image_ref
 }
 ```
@@ -45,8 +45,8 @@ resource "cosign_sign" "example" {
 ## Attest
 
 ```terraform
-resource "cosign_attest" "example" {
-  image = cosign_sign.example.signed_ref
+resource "scribble_attest" "example" {
+  image = scribble_sign.example.signed_ref
 
   predicates {
     type = "https://example.com/my/predicate/type"
@@ -75,4 +75,4 @@ resource "cosign_attest" "example" {
 | TF_COSIGN_ISSUER        | https://oauth2.sigstore.dev/auth | Configures Sigstore token issuer.                                                              |
 | TF_COSIGN_CLIENT_SECRET |                                  | Configures Sigstore OAuth Client Secret.                                                       |
 | TF_COSIGN_REDIRECT_URL  |                                  | Configures Sigstore interactive OAuth redirect URL. If empty, a random localhost port is used. |
-| TF_COSIGN_DISABLE       |                                  | Disables all cosign operations.                                                                |
+| TF_COSIGN_DISABLE       |                                  | Disables all scribble operations.                                                                |

@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/chainguard-dev/terraform-provider-cosign/internal/secant"
-	stypes "github.com/chainguard-dev/terraform-provider-cosign/internal/secant/types"
+	"github.com/ArmmanMechanics/terraform-provider-scribble/internal/secant"
+	stypes "github.com/ArmmanMechanics/terraform-provider-scribble/internal/secant/types"
 	"github.com/chainguard-dev/terraform-provider-oci/pkg/validators"
 	"github.com/google/go-containerregistry/pkg/name"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
@@ -73,7 +73,7 @@ func (r *AttestResource) Metadata(ctx context.Context, req resource.MetadataRequ
 
 func (r *AttestResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "This attests the provided image digest with cosign.",
+		MarkdownDescription: "This attests the provided image digest with scribble.",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Computed:            true,
@@ -284,8 +284,8 @@ func (r *AttestResource) doAttest(ctx context.Context, arm *AttestResourceModel,
 		return "", nil, errors.New("unable to parse image digest")
 	}
 
-	if os.Getenv("TF_COSIGN_DISABLE") != "" {
-		return digest.String(), errors.New("TF_COSIGN_DISABLE is set, skipping attesting"), nil
+	if os.Getenv("TF_SCRIBBLE_DISABLE") != "" {
+		return digest.String(), errors.New("TF_SCRIBBLE_DISABLE is set, skipping attesting"), nil
 	}
 	if !r.popts.oidc.Enabled(ctx) {
 		return digest.String(), errors.New("no ambient credentials are available to attest with, skipping attesting"), nil

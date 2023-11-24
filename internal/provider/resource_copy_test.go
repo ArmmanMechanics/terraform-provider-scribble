@@ -42,25 +42,25 @@ func TestAccResourceCosignCopy(t *testing.T) {
 		Steps: []resource.TestStep{{
 			// Sign and copy the image, then verify the copy's signature.
 			Config: fmt.Sprintf(`
-resource "cosign_sign" "foo" {
+resource "scribble_sign" "foo" {
   image = %q
 }
 
-resource "cosign_attest" "foo" {
-  image          = cosign_sign.foo.signed_ref
+resource "scribble_attest" "foo" {
+  image          = scribble_sign.foo.signed_ref
   predicate_type = "https://predicate.type"
   predicate      = jsonencode({
     foo = "bar"
   })
 }
 
-resource "cosign_copy" "copy" {
-  source      = cosign_attest.foo.attested_ref
+resource "scribble_copy" "copy" {
+  source      = scribble_attest.foo.attested_ref
   destination = %q
 }
 
-data "cosign_verify" "copy" {
-  image  = cosign_copy.copy.copied_ref
+data "scribble_verify" "copy" {
+  image  = scribble_copy.copy.copied_ref
   policy = jsonencode({
     apiVersion = "policy.sigstore.dev/v1beta1"
     kind       = "ClusterImagePolicy"
@@ -69,14 +69,14 @@ data "cosign_verify" "copy" {
     }
     spec = {
       images = [{
-        glob = cosign_copy.copy.copied_ref
+        glob = scribble_copy.copy.copied_ref
       }]
       authorities = [{
         keyless = {
           url = "https://fulcio.sigstore.dev"
           identities = [{
             issuer  = "https://token.actions.githubusercontent.com"
-            subject = "https://github.com/chainguard-dev/terraform-provider-cosign/.github/workflows/test.yml@refs/heads/main"
+            subject = "https://github.com/ArmmanMechanics/terraform-provider-scribble/.github/workflows/test.yml@refs/heads/main"
           }]
         }
         attestations = [{
@@ -104,7 +104,7 @@ data "cosign_verify" "copy" {
 			Check: resource.ComposeTestCheckFunc(
 				// Check that it got signed!
 				resource.TestCheckResourceAttr(
-					"data.cosign_verify.copy", "verified_ref", dst.Digest(dig1.String()).String(),
+					"data.scribble_verify.copy", "verified_ref", dst.Digest(dig1.String()).String(),
 				),
 			),
 		}},
