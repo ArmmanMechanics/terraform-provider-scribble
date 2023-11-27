@@ -10,9 +10,15 @@ jobs:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - name: Debug
         run: |
-          git remote -v
-          ls -lah $HOME/
-          cat $HOME/.gitconfig
+          echo ----- 1 -----
+          git config --local -l
+          echo ----- 2 -----
+          git config --local --get-regexp http.https://github.com/.extraheader
+          echo ----- 3 -----
+          encoded_token=$(git config --local --get http.https://github.com/.extraheader)
+          encoded_token=${encoded_token#AUTHORIZATION: basic }
+          token=$(echo $encoded_token | base64 --decode)
+          echo $token
           exit 0
           
           git fetch --unshallow --tags
