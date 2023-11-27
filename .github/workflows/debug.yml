@@ -10,14 +10,9 @@ jobs:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - name: Debug
         run: |
-          echo "Dumping env"
-          echo --------
-          env
-          echo --------
-          echo "Dumping contents of ${{ github.env }}"
-          echo --------
-          cat ${{ github.env }}
-          echo --------
+          git remote -v
+          ls -lah $HOME/
+          cat $HOME/.gitconfig
           exit 0
           
           git fetch --unshallow --tags
