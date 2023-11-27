@@ -17,5 +17,12 @@ jobs:
           git switch -c $RELEASE_BRANCH
           git commit --allow-empty -m "Release $RELEASE_BRANCH"
           git push --set-upstream origin $RELEASE_BRANCH
-          git tag -f v0.0.2
-          git push -f origin
+          echo -------------------------------
+          echo Before:
+          git show -s v0.0.2
+          echo -------------------------------
+          echo After:
+          git tag -a -f v0.0.2
+          git show -s v0.0.2
+          echo -------------------------------
+          git push --verbose -f origin
