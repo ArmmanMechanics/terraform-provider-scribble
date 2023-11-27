@@ -19,6 +19,7 @@ jobs:
           git push --set-upstream origin $RELEASE_BRANCH
           git tag -d v0.0.2
           git push --tags -f origin
+          sleep 5
           git tag v0.0.2
           git push --tags -f origin
           
