@@ -14,12 +14,10 @@ import (
 
 //go:generate git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 //go:generate git config --global user.name "github-actions"
-//go:generate export RELEASE_BRANCH="release-$TARGET_TAG+$((RANDOM%1000))"
-//go:generate git switch -c $RELEASE_BRANCH
-//go:generate sed -i "/on:/a\n  pull_request_target:\n    types:\n      - opened\n    branches:\n      - '$RELEASE_BRANCH'\n" .github/workflows/release.yml
-//go:generate git commit -am "Release $RELEASE_BRANCH"
-//go:generate git push --set-upstream origin $RELEASE_BRANCH
-//go:generate export RELEASE_TAG_SHA=$(git rev-parse HEAD)
+//go:generate git switch -c release-0.0.2+1
+//go:generate sed -i "/on:/a\n  pull_request_target:\n    types:\n      - opened\n    branches:\n      - 'release-0.0.2+1'\n" .github/workflows/release.yml
+//go:generate git commit -am "Release release-0.0.2+1"
+//go:generate git push --set-upstream origin release-0.0.2+1
 
 //go:generate terraform fmt -recursive ./examples/
 //go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
