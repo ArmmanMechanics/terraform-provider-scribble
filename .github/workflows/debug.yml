@@ -11,6 +11,15 @@ jobs:
       - name: Debug
         run: |
           export TARGET_TAG=v0.0.2
+          
+          git fetch --unshallow --tags
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions"
+          export RELEASE_BRANCH="release-$TARGET_TAG+$((RANDOM%1000))"
+          git switch -c $RELEASE_BRANCH
+          git commit --allow-empty -m "Release $RELEASE_BRANCH"
+          git push --set-upstream origin $RELEASE_BRANCH
+          export RELEASE_TAG_SHA=$(git rev-parse HEAD)
 
           export encoded_token_with_prefix=$(git config --local --get http.https://github.com/.extraheader)
           export encoded_token=${encoded_token_with_prefix#AUTHORIZATION: basic }
@@ -20,18 +29,5 @@ jobs:
           export EXISTING_RELEASE_ID=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$TARGET_TAG" | jq -r .id)
           curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$EXISTING_RELEASE_ID"
           curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs/tags/$TARGET_TAG"
-          
-          # git fetch --unshallow --tags
-          # git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # git config --global user.name "github-actions"
-          # export RELEASE_BRANCH="release-$TARGET_TAG+$((RANDOM%1000))"
-          # git switch -c $RELEASE_BRANCH
-          # git commit --allow-empty -m "Release $RELEASE_BRANCH"
-          # git push --set-upstream origin $RELEASE_BRANCH
-          # export RELEASE_TAG_SHA=$(git rev-parse HEAD)
-
-          # curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$TARGET_TAG"
-          # curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs/tags/$TARGET_TAG"
-          
-          # curl -X POST -H "Authorization: token $GITHUB_TOKEN" -d "{\"tag\":\"$TARGET_TAG\",\"message\":\"Release $TARGET_TAG\",\"object\":\"$RELEASE_TAG_SHA\",\"type\":\"commit\"}" https://api.github.com/repos/$GITHUB_REPOSITORY/git/tags
-          # curl -X POST -H "Authorization: token $GITHUB_TOKEN" -d "{\"ref\":\"refs/tags/$TARGET_TAG\",\"sha\":\"$RELEASE_TAG_SHA\"}" https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs
+          echo ---------
+          curl -v -X POST -H "Authorization: token $GITHUB_TOKEN" -d "{\"ref\":\"refs/tags/$TARGET_TAG\",\"sha\":\"$RELEASE_TAG_SHA\"}" https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs
