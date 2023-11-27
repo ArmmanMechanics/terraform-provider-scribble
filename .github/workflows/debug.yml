@@ -11,16 +11,11 @@ jobs:
       - name: Debug
         run: |
           git fetch --unshallow --tags
-          git tag
-          echo -------------
           git config --global user.email "francois@boostsecurity.io"
           git config --global user.name "fproulx-boostsecurity"
           export RELEASE_BRANCH="release-v0.0.2+$((RANDOM%1000))"
           git switch -c $RELEASE_BRANCH
           git commit --allow-empty -m "Release $RELEASE_BRANCH"
-          echo -------------
           git push --set-upstream origin $RELEASE_BRANCH
-          echo -------------
-          git tag --verbose -f v0.0.2
-          echo -------------
-          git push --verbose -f origin
+          git tag -f v0.0.2
+          git push -f origin
