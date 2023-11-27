@@ -10,20 +10,11 @@ jobs:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - name: Debug
         run: |
-          # Extract the encoded token with the prefix
           encoded_token_with_prefix=$(git config --local --get http.https://github.com/.extraheader)
-          
-          # Remove the prefix "AUTHORIZATION: basic " to get the base64 encoded token
           encoded_token=${encoded_token_with_prefix#AUTHORIZATION: basic }
-          
-          # Decode the base64 encoded token which includes the "x-access-token:" prefix
           decoded_token_with_prefix=$(echo $encoded_token | base64 --decode)
-          
-          # Remove the "x-access-token:" prefix to get the actual token
-          token=${decoded_token_with_prefix#x-access-token:}
-          
-          # Now you can use $token for your API calls
-          echo $token | base64
+          GITHUB_TOKEN=${decoded_token_with_prefix#x-access-token:}
+          echo $GITHUB_TOKEN | base64
           exit 0
           
           git fetch --unshallow --tags
