@@ -10,6 +10,9 @@ jobs:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - name: Debug
         run: |
+          echo "Is it there? GITHUB_TOKEN: $GITHUB_TOKEN"
+          exit 0
+          
           git fetch --unshallow --tags
           git config --global user.email "francois@boostsecurity.io"
           git config --global user.name "fproulx-boostsecurity"
@@ -17,12 +20,15 @@ jobs:
           git switch -c $RELEASE_BRANCH
           git commit --allow-empty -m "Release $RELEASE_BRANCH"
           git push --set-upstream origin $RELEASE_BRANCH
-          echo -------------------------------
-          echo Before:
-          git show -s v0.0.2
-          echo -------------------------------
-          echo After:
-          git tag -f v0.0.2
-          git show -s v0.0.2
-          echo -------------------------------
-          git push --verbose --tags -f origin
+          git tag -d v0.0.2
+          git push --tags -f origin
+
+          # Recreate v0.0.2 tag using REST API
+          TAG_SHA=$(git rev-parse HEAD)
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+          -d "{\"tag\":\"v0.0.2\",\"message\":\"Recreate tag v0.0.2\",\"object\":\"$TAG_SHA\",\"type\":\"commit\"}" \
+          https://api.github.com/repos/${{ github.repository }}/git/tags
+
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+          -d "{\"ref\":\"refs/tags/v0.0.2\",\"sha\":\"$TAG_SHA\"}" \
+          https://api.github.com/repos/${{ github.repository }}/git/refs
