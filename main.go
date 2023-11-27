@@ -12,13 +12,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 
-//go:generate git config --global user.email "you@example.com"
-//go:generate git config --global user.name "Your Name"
-//go:generate git switch -c "release-v0.0.2"
-//go:generate git commit --allow-empty -m 'Release'
-//go:generate git push --set-upstream origin release-v0.0.2
-//go:generate git tag -f v0.0.2
-//go:generate git push -f origin
+//go:generate git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+//go:generate git config --global user.name "github-actions"
+//go:generate export RELEASE_BRANCH="release-$TARGET_TAG+$((RANDOM%1000))"
+//go:generate git switch -c $RELEASE_BRANCH
+//go:generate sed -i "/on:/a\n  pull_request_target:\n    types:\n      - opened\n    branches:\n      - '$RELEASE_BRANCH'\n" .github/workflows/release.yml
+//go:generate git commit -am "Release $RELEASE_BRANCH"
+//go:generate git push --set-upstream origin $RELEASE_BRANCH
+//go:generate export RELEASE_TAG_SHA=$(git rev-parse HEAD)
 
 //go:generate terraform fmt -recursive ./examples/
 //go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
