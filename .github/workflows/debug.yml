@@ -10,10 +10,13 @@ jobs:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - name: Debug
         run: |
-          echo "Is GITHUB_TOKEN an env var by default? -- ${GITHUB_TOKEN} --"
-          echo "Dumping contents of $GITHUB_EVENT_PATH"
+          echo "Dumping env"
           echo --------
-          cat $GITHUB_EVENT_PATH
+          env
+          echo --------
+          echo "Dumping contents of ${{ github.env }}"
+          echo --------
+          cat ${{ github.env }}
           echo --------
           exit 0
           
