@@ -1,6 +1,6 @@
 # Terraform Provider for [`scribble`](https://example.com)
 
-🚨 **This is a only for testing.** 🚨
+🚨 **This is only for testing.** 🚨
 
 ## Usage
 
