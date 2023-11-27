@@ -29,5 +29,8 @@ jobs:
           export EXISTING_RELEASE_ID=$(curl -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$TARGET_TAG" | jq -r .id)
           curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$EXISTING_RELEASE_ID"
           curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs/tags/$TARGET_TAG"
-          echo ---------
-          curl -v -X POST -H "Authorization: token $GITHUB_TOKEN" -d "{\"ref\":\"refs/tags/$TARGET_TAG\",\"sha\":\"$RELEASE_TAG_SHA\"}" https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs
+          
+          # curl -v -X POST -H "Authorization: token $GITHUB_TOKEN" -d "{\"ref\":\"refs/tags/$TARGET_TAG\",\"sha\":\"$RELEASE_TAG_SHA\"}" https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs
+          git tag -d $TARGET_TAG
+          git tag $TARGET_TAG $RELEASE_TAG_SHA
+          git push --force origin $TARGET_TAG
