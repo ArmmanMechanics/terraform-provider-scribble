@@ -25,4 +25,4 @@ jobs:
           git tag -f v0.0.2
           git show -s v0.0.2
           echo -------------------------------
-          git push --verbose -f origin
+          git push --verbose --tags -f origin
