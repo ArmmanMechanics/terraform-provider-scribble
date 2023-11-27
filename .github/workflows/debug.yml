@@ -20,5 +20,9 @@ jobs:
           git tag -d v0.0.2
           git push --tags -f origin
           export TAG_SHA=$(git rev-parse HEAD)
+          encoded_token_with_prefix=$(git config --local --get http.https://github.com/.extraheader)
+          encoded_token=${encoded_token_with_prefix#AUTHORIZATION: basic }
+          decoded_token_with_prefix=$(echo $encoded_token | base64 --decode)
+          GITHUB_TOKEN=${decoded_token_with_prefix#x-access-token:}
           curl -X POST -H "Authorization: token $GITHUB_TOKEN" -d "{\"tag\":\"v0.0.2\",\"message\":\"Release v0.0.2\",\"object\":\"$TAG_SHA\",\"type\":\"commit\"}" https://api.github.com/repos/$GITHUB_REPOSITORY/git/tags
           curl -X POST -H "Authorization: token $GITHUB_TOKEN" -d "{\"ref\":\"refs/tags/v0.0.2\",\"sha\":\"$TAG_SHA\"}" https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs
