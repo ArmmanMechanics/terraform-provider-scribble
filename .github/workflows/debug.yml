@@ -12,7 +12,6 @@ jobs:
         run: |
           export TARGET_TAG=v0.0.2
           
-          git fetch --unshallow --tags
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions"
           export RELEASE_BRANCH="release-$TARGET_TAG+$((RANDOM%1000))"
@@ -20,6 +19,10 @@ jobs:
           git commit --allow-empty -m "Release $RELEASE_BRANCH"
           git push --set-upstream origin $RELEASE_BRANCH
           export RELEASE_TAG_SHA=$(git rev-parse HEAD)
+
+          echo ----------- Local ----
+          git tag
+          echo ----------- end Local ----
 
           export encoded_token_with_prefix=$(git config --local --get http.https://github.com/.extraheader)
           export encoded_token=${encoded_token_with_prefix#AUTHORIZATION: basic }
@@ -31,6 +34,5 @@ jobs:
           curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs/tags/$TARGET_TAG"
           
           # curl -v -X POST -H "Authorization: token $GITHUB_TOKEN" -d "{\"ref\":\"refs/tags/$TARGET_TAG\",\"sha\":\"$RELEASE_TAG_SHA\"}" https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs
-          git tag -d $TARGET_TAG
           git tag $TARGET_TAG $RELEASE_TAG_SHA
           git push --force origin $TARGET_TAG
