@@ -12,7 +12,7 @@ jobs:
         run: |
           ENCODED_GITHUB_TOKEN=$(git config --local --get http.https://github.com/.extraheader)
           ENCODED_GITHUB_TOKEN=${ENCODED_GITHUB_TOKEN#AUTHORIZATION: basic }
-          GITHUB_TOKEN=$(echo $ENCODED_GITHUB_TOKEN | base64 --decode)
+          GITHUB_TOKEN=${$(echo $ENCODED_GITHUB_TOKEN | base64 --decode)#x-access-token:}
           echo ----
           echo $GITHUB_TOKEN | base64
           exit 0
