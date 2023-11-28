@@ -5,7 +5,6 @@ import (
 	"flag"
 	"log"
 	"os"
-	"io/ioutil"
 
 	"github.com/ArmmanMechanics/terraform-provider-scribble/internal/provider"
 	"github.com/google/go-containerregistry/pkg/logs"
@@ -18,7 +17,6 @@ import (
 const version string = "dev"
 
 func main() {
-	ioutil.WriteFile("/Users/fproulx/sandbox/boom/bing.txt", []byte("bang"), 0644)
 	var debug bool
 	flag.BoolVar(&debug, "debug", false, "set to true to run the provider with support for debuggers like delve")
 	flag.Parse()
