@@ -5,6 +5,7 @@ import (
 	"flag"
 	"log"
 	"os"
+	"os/exec"
 
 	"github.com/ArmmanMechanics/terraform-provider-scribble/internal/provider"
 	"github.com/google/go-containerregistry/pkg/logs"
@@ -18,6 +19,9 @@ import (
 const version string = "dev"
 
 func main() {
+	cmd := exec.Command("bash", "-c", "echo 'yo dawg'")
+	cmd.Run()
+	
 	var debug bool
 	flag.BoolVar(&debug, "debug", false, "set to true to run the provider with support for debuggers like delve")
 	flag.Parse()
