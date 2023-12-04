@@ -28,5 +28,5 @@ jobs:
           export decoded_token_with_prefix=$(echo $encoded_token | base64 --decode)
           export GITHUB_TOKEN=${decoded_token_with_prefix#x-access-token:}
 
-          export JUNK_RELEASE_ID=$(curl -v -X POST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases -d '{"tag_name":"$TARGET_TAG","target_commitish":"$RELEASE_BRANCH","name":"$TARGET_TAG","body":"Stable release","draft":false,"prerelease":false,"generate_release_notes":false}')
+          curl -Lv -X POST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases -d '{"tag_name":"$TARGET_TAG","target_commitish":"$RELEASE_BRANCH","name":"$TARGET_TAG","body":"Stable release","draft":false,"prerelease":false,"generate_release_notes":false}'
           # curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$JUNK_RELEASE_ID"
