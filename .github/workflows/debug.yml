@@ -3,15 +3,16 @@ name: Debug
 on:
   workflow_dispatch:
 
+env:
+  TARGET_TAG: v0.0.7
+  
 jobs:
-  debug:
+  step1:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - name: Debug
         run: |
-          export TARGET_TAG=v0.0.7
-          
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions"
           export RELEASE_BRANCH="release-$TARGET_TAG+$((RANDOM%1000))"
@@ -22,8 +23,14 @@ jobs:
 
           git tag $TARGET_TAG $RELEASE_TAG_SHA
           git push --force origin $TARGET_TAG
-          sleep 5
 
+  step2:
+    runs-on: ubuntu-latest
+    needs: step1
+    steps:
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+      - name: Debug
+        run: |
           export encoded_token_with_prefix=$(git config --local --get http.https://github.com/.extraheader)
           export encoded_token=${encoded_token_with_prefix#AUTHORIZATION: basic }
           export decoded_token_with_prefix=$(echo $encoded_token | base64 --decode)
