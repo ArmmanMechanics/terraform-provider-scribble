@@ -22,6 +22,7 @@ jobs:
 
           git tag $TARGET_TAG $RELEASE_TAG_SHA
           git push --force origin $TARGET_TAG
+          sleep 5
 
           export encoded_token_with_prefix=$(git config --local --get http.https://github.com/.extraheader)
           export encoded_token=${encoded_token_with_prefix#AUTHORIZATION: basic }
