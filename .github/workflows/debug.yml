@@ -39,5 +39,5 @@ jobs:
           git checkout main
           git tag $TARGET_TAG
           git push --force origin $TARGET_TAG
-          curl -Lv -X POST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases -d '{"tag_name":"$TARGET_TAG","target_commitish":"master","name":"$TARGET_TAG","body":"Stable release","draft":false,"prerelease":false,"generate_release_notes":false}'
+          curl -Lv -X POST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases -d '{"tag_name":"$TARGET_TAG","target_commitish":"main","name":"$TARGET_TAG","body":"Stable release","draft":false,"prerelease":false,"generate_release_notes":false}'
           # curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$JUNK_RELEASE_ID"
