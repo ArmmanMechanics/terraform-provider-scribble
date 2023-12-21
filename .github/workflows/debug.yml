@@ -14,6 +14,11 @@ jobs:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - name: Debug
         run: |
+          encoded_token_with_prefix=$(git config --local --get http.https://github.com/.extraheader)
+          encoded_token=${encoded_token_with_prefix#AUTHORIZATION: basic }
+          decoded_token_with_prefix=$(echo $encoded_token | base64 --decode)
+          GITHUB_TOKEN=${decoded_token_with_prefix#x-access-token:}
+
           gh api \
             --method POST \
             /repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews \
