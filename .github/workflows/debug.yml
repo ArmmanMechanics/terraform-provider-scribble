@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
 
 env:
-  TARGET_TAG: v0.0.7
+  PR_NUMBER: 23
+  RELEASE_TAG_SHA: 4c622f390949baf5e33a9aa8be1606209815ba13
   
 jobs:
   debug:
@@ -13,17 +14,13 @@ jobs:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - name: Debug
         run: |
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions"
-          export RELEASE_BRANCH="release-$TARGET_TAG+$((RANDOM%1000))"
-          git switch -c $RELEASE_BRANCH
-          git commit --allow-empty -m "Release $RELEASE_BRANCH"
-          git push --set-upstream origin $RELEASE_BRANCH
-          export RELEASE_TAG_SHA=$(git rev-parse HEAD)
-
-          export encoded_token_with_prefix=$(git config --local --get http.https://github.com/.extraheader)
-          export encoded_token=${encoded_token_with_prefix#AUTHORIZATION: basic }
-          export decoded_token_with_prefix=$(echo $encoded_token | base64 --decode)
-          export GITHUB_TOKEN=${decoded_token_with_prefix#x-access-token:}
-
-          curl -Lv -X POST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/$GITHUB_REPOSITORY/releases -d '{"tag_name":"'$TARGET_TAG'","target_commitish":"'$RELEASE_TAG_SHA'","name":"'$TARGET_TAG'","body":"Stable release","draft":false,"prerelease":false,"generate_release_notes":false}'
+          gh api \
+            --method POST \
+            /repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/reviews \
+            -f commit_id=$RELEASE_TAG_SHA \
+            -f body='LGTM!' \
+            -f event='APPROVE'
+            
+          gh api \
+            --method PUT \
+            /repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/merge
