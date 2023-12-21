@@ -2,6 +2,9 @@ name: Debug
 
 on:
   workflow_dispatch:
+
+env:
+  TARGET_TAG: v0.0.8
   
 jobs:
   debug:
