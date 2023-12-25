@@ -13,7 +13,7 @@ require (
 	github.com/cyberphone/json-canonicalization v0.0.0-20230710064741-aa7fe85c7dbd
 	github.com/go-openapi/runtime v0.26.0
 	github.com/go-openapi/strfmt v0.21.7
-	github.com/go-openapi/swag v0.22.5
+	github.com/go-openapi/swag v0.22.6
 	github.com/google/certificate-transparency-go v1.1.7
 	github.com/google/go-containerregistry v0.16.2-0.20230919002926-dbcd01c402b2
 	github.com/google/uuid v1.5.0
