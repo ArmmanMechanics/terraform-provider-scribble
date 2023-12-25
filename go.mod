@@ -15,7 +15,7 @@ require (
 	github.com/go-openapi/strfmt v0.21.7
 	github.com/go-openapi/swag v0.22.5
 	github.com/google/certificate-transparency-go v1.1.7
-	github.com/google/go-containerregistry v0.16.2-0.20230919002926-dbcd01c402b2
+	github.com/google/go-containerregistry v0.17.0
 	github.com/google/uuid v1.5.0
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/hashicorp/go-retryablehttp v0.7.5
